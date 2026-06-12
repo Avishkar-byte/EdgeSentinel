@@ -37,12 +37,12 @@ from pymavlink import mavutil
 CONNECTION_STRING   = "/dev/ttyACM0"   # change to /dev/ttyUSB0 if needed
 BAUD_RATE           = 57600
 
-TAKEOFF_ALTITUDE    = 2.0    # metres  — fly circle at this height
+TAKEOFF_ALTITUDE    = 2.0    # metres  - fly circle at this height
 CIRCLE_RADIUS       = 1.0    # metres
 NUM_POINTS          = 36     # waypoints around the circle (360/36 = 10° steps)
-POINT_SPEED         = 0.8    # m/s  — travel speed between waypoints
-POSITION_TOLERANCE  = 0.4    # metres — how close to each waypoint before moving on
-ALTITUDE_TOLERANCE  = 0.15   # metres — altitude acceptance window
+POINT_SPEED         = 0.8    # m/s  - travel speed between waypoints
+POSITION_TOLERANCE  = 0.4    # metres - how close to each waypoint before moving on
+ALTITUDE_TOLERANCE  = 0.15   # metres - altitude acceptance window
 
 MODE_RETRY_DELAY    = 0.5
 MODE_MAX_RETRIES    = 20
@@ -79,7 +79,7 @@ def offset_location(origin, d_north: float, d_east: float) -> LocationGlobalRela
     """
     Return a new LocationGlobalRelative that is d_north metres north and
     d_east metres east of `origin`, at the same altitude.
-    Uses flat-earth approximation (fine for 2–5 m radius).
+    Uses flat-earth approximation (fine for 2-5 m radius).
     """
     earth_radius = 6378137.0
     d_lat = d_north / earth_radius
@@ -111,7 +111,7 @@ def send_ned_velocity(vehicle, vx: float, vy: float, vz: float):
 
 
 # ─────────────────────────────────────────────
-# STEP 1 — Connect
+# STEP 1 - Connect
 # ─────────────────────────────────────────────
 
 def connect_vehicle():
@@ -137,7 +137,7 @@ def connect_vehicle():
 
 
 # ─────────────────────────────────────────────
-# STEP 2 — GUIDED mode with retry
+# STEP 2 - GUIDED mode with retry
 # ─────────────────────────────────────────────
 
 def set_guided_mode(vehicle):
@@ -159,7 +159,7 @@ def set_guided_mode(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 3 — ARM with retry
+# STEP 3 - ARM with retry
 # ─────────────────────────────────────────────
 
 def arm_vehicle(vehicle):
@@ -171,7 +171,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: No 3D GPS fix — proceeding (SITL / indoor?)")
+        log("WARNING: No 3D GPS fix - proceeding (SITL / indoor?)")
 
     log("  Waiting for EKF to be healthy …")
     for _ in range(20):
@@ -179,7 +179,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: EKF not healthy — proceeding anyway")
+        log("WARNING: EKF not healthy - proceeding anyway")
 
     for attempt in range(1, ARM_MAX_RETRIES + 1):
         if vehicle.armed:
@@ -197,7 +197,7 @@ def arm_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 4 — Takeoff
+# STEP 4 - Takeoff
 # ─────────────────────────────────────────────
 
 def takeoff(vehicle, target_alt: float):
@@ -219,7 +219,7 @@ def takeoff(vehicle, target_alt: float):
 
 
 # ─────────────────────────────────────────────
-# STEP 5 — Fly circle of given radius
+# STEP 5 - Fly circle of given radius
 # ─────────────────────────────────────────────
 
 def fly_circle(vehicle, radius: float, num_points: int, altitude: float):
@@ -296,11 +296,11 @@ def wait_for_waypoint(vehicle, target, label: str = "waypoint", timeout: float =
 
         time.sleep(0.3)
 
-    log(f"  ⚠ Timeout reaching {label} — continuing to next point")
+    log(f"  ⚠ Timeout reaching {label} - continuing to next point")
 
 
 # ─────────────────────────────────────────────
-# STEP 6 — Land (NOT RTL)
+# STEP 6 - Land (NOT RTL)
 # ─────────────────────────────────────────────
 
 def land_vehicle(vehicle):
@@ -313,7 +313,7 @@ def land_vehicle(vehicle):
             break
         time.sleep(0.5)
     else:
-        log("WARNING: LAND mode not confirmed — continuing")
+        log("WARNING: LAND mode not confirmed - continuing")
 
     log("Descending …")
     while True:
@@ -332,7 +332,7 @@ def land_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 7 — Disarm
+# STEP 7 - Disarm
 # ─────────────────────────────────────────────
 
 def disarm_vehicle(vehicle):
@@ -357,7 +357,7 @@ def disarm_vehicle(vehicle):
         0, 0, 21196, 0, 0, 0, 0, 0,
     )
     time.sleep(2)
-    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm — check GCS!")
+    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm - check GCS!")
 
 
 # ─────────────────────────────────────────────

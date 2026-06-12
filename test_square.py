@@ -14,7 +14,7 @@ Flight Plan:
           → Corner B  (3m forward)
           → Corner C  (3m right)
           → Corner D  (3m back)
-          → Corner A  (3m left  — back to launch point)
+          → Corner A  (3m left  - back to launch point)
   7.  Hover at launch point for 2 seconds
   8.  LAND in place (NOT RTL)
   9.  Disarm
@@ -43,15 +43,15 @@ from pymavlink import mavutil
 CONNECTION_STRING   = "/dev/ttyACM0"   # change to /dev/ttyUSB0 if using USB adapter
 BAUD_RATE           = 57600
 
-FLIGHT_ALTITUDE     = 5.0    # metres — takeoff and cruise height
-SQUARE_SIDE         = 3.0    # metres — side length of the square
-CRUISE_SPEED        =1.5    # m/s    — speed between waypoints (slow = precise)
+FLIGHT_ALTITUDE     = 5.0    # metres - takeoff and cruise height
+SQUARE_SIDE         = 3.0    # metres - side length of the square
+CRUISE_SPEED        =1.5    # m/s    - speed between waypoints (slow = precise)
 CORNER_HOVER        = 2    # seconds to pause at each corner
 FINAL_HOVER         = 3      # seconds to hover at launch point before landing
 
-ALTITUDE_TOLERANCE  = 0.15   # metres — ±window for altitude warnings
-POSITION_TOLERANCE  = 0.35   # metres — horizontal dist to consider waypoint reached
-WAYPOINT_TIMEOUT    = 45.0   # seconds — max wait per waypoint before moving on
+ALTITUDE_TOLERANCE  = 0.15   # metres - ±window for altitude warnings
+POSITION_TOLERANCE  = 0.35   # metres - horizontal dist to consider waypoint reached
+WAYPOINT_TIMEOUT    = 45.0   # seconds - max wait per waypoint before moving on
 
 MODE_RETRY_DELAY    = 0.5
 MODE_MAX_RETRIES    = 20
@@ -87,7 +87,7 @@ def offset_location(origin: LocationGlobalRelative,
     """
     Return a GPS point offset by d_north metres north and d_east metres east
     from origin, at the same altitude.
-    Flat-earth approximation — accurate to < 1 mm at distances < 50 m.
+    Flat-earth approximation - accurate to < 1 mm at distances < 50 m.
     """
     earth_radius = 6378137.0
     d_lat = d_north / earth_radius
@@ -109,7 +109,7 @@ def heading_to_ned(distance: float, heading_deg: float):
 
 def get_yaw_degrees(vehicle) -> float:
     """
-    Read vehicle heading in 0–360° (0=North, clockwise).
+    Read vehicle heading in 0-360° (0=North, clockwise).
     """
     yaw_rad = vehicle.attitude.yaw
     return (math.degrees(yaw_rad) + 360) % 360
@@ -126,7 +126,7 @@ def check_altitude(vehicle, target_alt: float, label: str = "") -> float:
 
 
 # ─────────────────────────────────────────────
-# STEP 1 — Connect
+# STEP 1 - Connect
 # ─────────────────────────────────────────────
 
 def connect_vehicle():
@@ -153,7 +153,7 @@ def connect_vehicle():
 
 
 # ─────────────────────────────────────────────
-# STEP 2 — GUIDED mode with retry
+# STEP 2 - GUIDED mode with retry
 # ─────────────────────────────────────────────
 
 def set_guided_mode(vehicle):
@@ -173,7 +173,7 @@ def set_guided_mode(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 3 — ARM with retry
+# STEP 3 - ARM with retry
 # ─────────────────────────────────────────────
 
 def arm_vehicle(vehicle):
@@ -185,7 +185,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: No 3D GPS fix — proceeding (SITL / indoor?)")
+        log("WARNING: No 3D GPS fix - proceeding (SITL / indoor?)")
 
     log("  Waiting for EKF to be healthy …")
     for _ in range(20):
@@ -193,7 +193,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: EKF not healthy — proceeding anyway")
+        log("WARNING: EKF not healthy - proceeding anyway")
 
     for attempt in range(1, ARM_MAX_RETRIES + 1):
         if vehicle.armed:
@@ -208,7 +208,7 @@ def arm_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 4 — Takeoff
+# STEP 4 - Takeoff
 # ─────────────────────────────────────────────
 
 def takeoff(vehicle, target_alt: float):
@@ -258,7 +258,7 @@ def goto_and_monitor(vehicle, target_wp: LocationGlobalRelative,
 
         time.sleep(0.3)
 
-    log(f"⚠ Timeout reaching [{label}] — continuing anyway")
+    log(f"⚠ Timeout reaching [{label}] - continuing anyway")
 
 
 def hover_at(vehicle, target_alt: float, duration: float, label: str):
@@ -272,7 +272,7 @@ def hover_at(vehicle, target_alt: float, duration: float, label: str):
 
 
 # ─────────────────────────────────────────────
-# STEP 5-7 — Square flight
+# STEP 5-7 - Square flight
 # ─────────────────────────────────────────────
 
 def fly_square(vehicle, side: float, altitude: float):
@@ -330,7 +330,7 @@ def fly_square(vehicle, side: float, altitude: float):
     #   C = B + side * right        (forward + right)
     #   D = A + side * right        (right only)
     #
-    corner_A = origin    # launch point — we return here at the end
+    corner_A = origin    # launch point - we return here at the end
 
     corner_B = offset_location(
         origin,
@@ -351,10 +351,10 @@ def fly_square(vehicle, side: float, altitude: float):
     )
 
     corners = [
-        ("A — ORIGIN / LAUNCH",  corner_A),
-        ("B — FORWARD",          corner_B),
-        ("C — FORWARD+RIGHT",    corner_C),
-        ("D — RIGHT",            corner_D),
+        ("A - ORIGIN / LAUNCH",  corner_A),
+        ("B - FORWARD",          corner_B),
+        ("C - FORWARD+RIGHT",    corner_C),
+        ("D - RIGHT",            corner_D),
     ]
 
     log("  Computed waypoints:")
@@ -364,30 +364,30 @@ def fly_square(vehicle, side: float, altitude: float):
 
     # ── Fly the square: A → B → C → D → A ───────────────────
 
-    # Already at A (just took off) — fly to B
+    # Already at A (just took off) - fly to B
     log("─── LEG 1: A → B  (forward) ───")
-    goto_and_monitor(vehicle, corner_B, altitude, label="B — FORWARD")
+    goto_and_monitor(vehicle, corner_B, altitude, label="B - FORWARD")
     hover_at(vehicle, altitude, CORNER_HOVER, label="B")
 
     log("─── LEG 2: B → C  (right) ───")
-    goto_and_monitor(vehicle, corner_C, altitude, label="C — FORWARD+RIGHT")
+    goto_and_monitor(vehicle, corner_C, altitude, label="C - FORWARD+RIGHT")
     hover_at(vehicle, altitude, CORNER_HOVER, label="C")
 
     log("─── LEG 3: C → D  (backward) ───")
-    goto_and_monitor(vehicle, corner_D, altitude, label="D — RIGHT")
+    goto_and_monitor(vehicle, corner_D, altitude, label="D - RIGHT")
     hover_at(vehicle, altitude, CORNER_HOVER, label="D")
 
-    log("─── LEG 4: D → A  (left — back to launch point) ───")
-    goto_and_monitor(vehicle, corner_A, altitude, label="A — ORIGIN/LAUNCH")
+    log("─── LEG 4: D → A  (left - back to launch point) ───")
+    goto_and_monitor(vehicle, corner_A, altitude, label="A - ORIGIN/LAUNCH")
 
-    log("✓ Square complete — back at launch point")
+    log("✓ Square complete - back at launch point")
 
     # ── Final hover at origin before landing ─────────────────
-    hover_at(vehicle, altitude, FINAL_HOVER, label="ORIGIN — pre-land")
+    hover_at(vehicle, altitude, FINAL_HOVER, label="ORIGIN - pre-land")
 
 
 # ─────────────────────────────────────────────
-# STEP 8 — Land (NOT RTL)
+# STEP 8 - Land (NOT RTL)
 # ─────────────────────────────────────────────
 
 def land_vehicle(vehicle):
@@ -400,7 +400,7 @@ def land_vehicle(vehicle):
             break
         time.sleep(0.5)
     else:
-        log("WARNING: LAND mode not confirmed — continuing")
+        log("WARNING: LAND mode not confirmed - continuing")
 
     log("Descending …")
     while True:
@@ -418,7 +418,7 @@ def land_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 9 — Disarm
+# STEP 9 - Disarm
 # ─────────────────────────────────────────────
 
 def disarm_vehicle(vehicle):
@@ -443,7 +443,7 @@ def disarm_vehicle(vehicle):
         0, 0, 21196, 0, 0, 0, 0, 0,
     )
     time.sleep(2)
-    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm — check GCS!")
+    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm - check GCS!")
 
 
 # ─────────────────────────────────────────────
@@ -462,7 +462,7 @@ def main():
         set_guided_mode(vehicle)                         # Step 2
         arm_vehicle(vehicle)                             # Step 3
         takeoff(vehicle, FLIGHT_ALTITUDE)                # Step 4
-        fly_square(vehicle, SQUARE_SIDE, FLIGHT_ALTITUDE)  # Steps 5–7
+        fly_square(vehicle, SQUARE_SIDE, FLIGHT_ALTITUDE)  # Steps 5-7
         land_vehicle(vehicle)                            # Step 8
         disarm_vehicle(vehicle)                          # Step 9
 

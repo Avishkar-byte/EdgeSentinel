@@ -39,14 +39,14 @@ from pymavlink import mavutil
 CONNECTION_STRING    = "/dev/ttyACM0"    # change to /dev/ttyUSB0 if using USB adapter
 BAUD_RATE            = 57600
 
-FLIGHT_ALTITUDE      = 5.0    # metres — takeoff and cruise height
-FLIGHT_DISTANCE      = 5.0    # metres — how far to fly forward (and back)
-CRUISE_SPEED         = 1.0    # m/s    — travel speed between waypoints
+FLIGHT_ALTITUDE      = 5.0    # metres - takeoff and cruise height
+FLIGHT_DISTANCE      = 5.0    # metres - how far to fly forward (and back)
+CRUISE_SPEED         = 1.0    # m/s    - travel speed between waypoints
 HOVER_DURATION       = 2      # seconds to pause at forward point and at origin
 
-ALTITUDE_TOLERANCE   = 0.15   # metres — ±window for altitude check
-POSITION_TOLERANCE   = 0.4    # metres — horizontal distance to consider waypoint "reached"
-WAYPOINT_TIMEOUT     = 40.0   # seconds — max wait per waypoint before moving on
+ALTITUDE_TOLERANCE   = 0.15   # metres - ±window for altitude check
+POSITION_TOLERANCE   = 0.4    # metres - horizontal distance to consider waypoint "reached"
+WAYPOINT_TIMEOUT     = 40.0   # seconds - max wait per waypoint before moving on
 
 MODE_RETRY_DELAY     = 0.5
 MODE_MAX_RETRIES     = 20
@@ -83,7 +83,7 @@ def offset_location_by_heading(origin, distance: float, heading_deg: float) -> L
     """
     Return a new GPS point that is `distance` metres away from `origin`
     in the direction of `heading_deg` (0=North, 90=East, 180=South, 270=West).
-    Uses flat-earth approximation — accurate to < 1 mm at 5 m range.
+    Uses flat-earth approximation - accurate to < 1 mm at 5 m range.
     """
     heading_rad = math.radians(heading_deg)
     d_north = distance * math.cos(heading_rad)
@@ -102,19 +102,19 @@ def offset_location_by_heading(origin, distance: float, heading_deg: float) -> L
 
 def get_yaw_degrees(vehicle) -> float:
     """
-    Read current vehicle heading in degrees (0–360, 0=North, clockwise).
+    Read current vehicle heading in degrees (0-360, 0=North, clockwise).
     Uses attitude.yaw (radians, -π to +π) and converts to compass bearing.
     """
     yaw_rad = vehicle.attitude.yaw
     yaw_deg = math.degrees(yaw_rad)
-    # Normalize to 0–360
+    # Normalize to 0-360
     return (yaw_deg + 360) % 360
 
 
 def check_altitude(vehicle, target_alt: float, label: str = ""):
     """
     Log current altitude and warn if outside tolerance.
-    Does NOT send a correction — DroneKit's simple_goto maintains altitude
+    Does NOT send a correction - DroneKit's simple_goto maintains altitude
     automatically in GUIDED mode.
     """
     alt = vehicle.location.global_relative_frame.alt
@@ -126,7 +126,7 @@ def check_altitude(vehicle, target_alt: float, label: str = ""):
 
 
 # ─────────────────────────────────────────────
-# STEP 1 — Connect
+# STEP 1 - Connect
 # ─────────────────────────────────────────────
 
 def connect_vehicle():
@@ -153,7 +153,7 @@ def connect_vehicle():
 
 
 # ─────────────────────────────────────────────
-# STEP 2 — GUIDED mode with retry
+# STEP 2 - GUIDED mode with retry
 # ─────────────────────────────────────────────
 
 def set_guided_mode(vehicle):
@@ -175,7 +175,7 @@ def set_guided_mode(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 3 — ARM with retry
+# STEP 3 - ARM with retry
 # ─────────────────────────────────────────────
 
 def arm_vehicle(vehicle):
@@ -187,7 +187,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: No 3D GPS fix — proceeding (SITL / indoor?)")
+        log("WARNING: No 3D GPS fix - proceeding (SITL / indoor?)")
 
     log("  Waiting for EKF to be healthy …")
     for _ in range(20):
@@ -195,7 +195,7 @@ def arm_vehicle(vehicle):
             break
         time.sleep(1)
     else:
-        log("WARNING: EKF not healthy — proceeding anyway")
+        log("WARNING: EKF not healthy - proceeding anyway")
 
     for attempt in range(1, ARM_MAX_RETRIES + 1):
         if vehicle.armed:
@@ -210,7 +210,7 @@ def arm_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 4 — Takeoff
+# STEP 4 - Takeoff
 # ─────────────────────────────────────────────
 
 def takeoff(vehicle, target_alt: float):
@@ -261,7 +261,7 @@ def goto_and_monitor(vehicle, target_wp, target_alt: float, label: str,
 
         time.sleep(0.3)
 
-    log(f"⚠ Timeout reaching {label} — continuing anyway")
+    log(f"⚠ Timeout reaching {label} - continuing anyway")
 
 
 def hover_and_monitor(vehicle, target_alt: float, duration: int, label: str):
@@ -276,7 +276,7 @@ def hover_and_monitor(vehicle, target_alt: float, duration: int, label: str):
 
 
 # ─────────────────────────────────────────────
-# STEP 5-9 — Straight flight out and back
+# STEP 5-9 - Straight flight out and back
 # ─────────────────────────────────────────────
 
 def fly_straight_and_back(vehicle, distance: float, altitude: float):
@@ -323,11 +323,11 @@ def fly_straight_and_back(vehicle, distance: float, altitude: float):
     # ── Hover at origin ──────────────────────────────────────
     hover_and_monitor(vehicle, altitude, HOVER_DURATION, label="ORIGIN")
 
-    log("✓ Straight flight complete — back at origin")
+    log("✓ Straight flight complete - back at origin")
 
 
 # ─────────────────────────────────────────────
-# STEP 10 — Land (NOT RTL)
+# STEP 10 - Land (NOT RTL)
 # ─────────────────────────────────────────────
 
 def land_vehicle(vehicle):
@@ -340,7 +340,7 @@ def land_vehicle(vehicle):
             break
         time.sleep(0.5)
     else:
-        log("WARNING: LAND mode not confirmed — continuing")
+        log("WARNING: LAND mode not confirmed - continuing")
 
     log("Descending …")
     while True:
@@ -358,7 +358,7 @@ def land_vehicle(vehicle):
 
 
 # ─────────────────────────────────────────────
-# STEP 11 — Disarm
+# STEP 11 - Disarm
 # ─────────────────────────────────────────────
 
 def disarm_vehicle(vehicle):
@@ -383,7 +383,7 @@ def disarm_vehicle(vehicle):
         0, 0, 21196, 0, 0, 0, 0, 0,
     )
     time.sleep(2)
-    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm — check GCS!")
+    log("✓ Force-disarm sent" if not vehicle.armed else "⚠ Could not confirm disarm - check GCS!")
 
 
 # ─────────────────────────────────────────────
@@ -402,7 +402,7 @@ def main():
         set_guided_mode(vehicle)                             # Step 2
         arm_vehicle(vehicle)                                 # Step 3
         takeoff(vehicle, FLIGHT_ALTITUDE)                    # Step 4
-        fly_straight_and_back(                               # Steps 5–9
+        fly_straight_and_back(                               # Steps 5-9
             vehicle,
             distance=FLIGHT_DISTANCE,
             altitude=FLIGHT_ALTITUDE,

@@ -47,7 +47,7 @@ def log(tag: str, msg: str):
 
 
 # ─────────────────────────────────────────────
-#  STEP 1 — Connect to Pixhawk
+#  STEP 1 - Connect to Pixhawk
 # ─────────────────────────────────────────────
 def connect_to_vehicle() -> "Vehicle":
     log("INFO", f"Connecting to Pixhawk on {CONNECTION_STRING} @ {BAUD_RATE} baud …")
@@ -74,7 +74,7 @@ def connect_to_vehicle() -> "Vehicle":
 
 
 # ─────────────────────────────────────────────
-#  STEP 2 — Set GUIDED mode (with retry/spam)
+#  STEP 2 - Set GUIDED mode (with retry/spam)
 # ─────────────────────────────────────────────
 def set_guided_mode(vehicle) -> None:
     log("INFO", "Attempting to switch to GUIDED mode …")
@@ -97,7 +97,7 @@ def set_guided_mode(vehicle) -> None:
 
 
 # ─────────────────────────────────────────────
-#  STEP 3 — ARM the drone (with retry/spam)
+#  STEP 3 - ARM the drone (with retry/spam)
 # ─────────────────────────────────────────────
 def arm_vehicle(vehicle) -> None:
     log("INFO", "Waiting for pre-arm checks to clear …")
@@ -136,7 +136,7 @@ def arm_vehicle(vehicle) -> None:
 
 
 # ─────────────────────────────────────────────
-#  STEP 4 — Takeoff, hover, verify altitude, land
+#  STEP 4 - Takeoff, hover, verify altitude, land
 # ─────────────────────────────────────────────
 def takeoff_hover_land(vehicle) -> None:
 
@@ -202,7 +202,7 @@ def takeoff_hover_land(vehicle) -> None:
         time.sleep(0.3)
     else:
         log("WARN", f"Mode is still '{vehicle.mode.name}'. "
-                    "Proceeding anyway — drone should descend.")
+                    "Proceeding anyway - drone should descend.")
 
     # ── 4f. Wait until landed (altitude < 0.15 m) ──────────────────
     log("WAIT", "Waiting for landing …")
@@ -221,7 +221,7 @@ def takeoff_hover_land(vehicle) -> None:
 
 
 # ─────────────────────────────────────────────
-#  STEP 5 — Disarm
+#  STEP 5 - Disarm
 # ─────────────────────────────────────────────
 def disarm_vehicle(vehicle) -> None:
     log("INFO", "Disarming …")
@@ -249,23 +249,23 @@ def _emergency_land(vehicle) -> None:
 # ─────────────────────────────────────────────
 def main():
     print("=" * 60)
-    print("  Autonomous Drone Flight — Pixhawk 2.4.8 + Jetson Nano")
+    print("  Autonomous Drone Flight - Pixhawk 2.4.8 + Jetson Nano")
     print("=" * 60)
 
-    # Step 1 — Connect
+    # Step 1 - Connect
     vehicle = connect_to_vehicle()
 
     try:
-        # Step 2 — GUIDED mode
+        # Step 2 - GUIDED mode
         set_guided_mode(vehicle)
 
-        # Step 3 — ARM
+        # Step 3 - ARM
         arm_vehicle(vehicle)
 
-        # Step 4 — Takeoff → hover → land
+        # Step 4 - Takeoff → hover → land
         takeoff_hover_land(vehicle)
 
-        # Step 5 — Disarm
+        # Step 5 - Disarm
         disarm_vehicle(vehicle)
 
         log("OK", "Mission complete! 🎉")

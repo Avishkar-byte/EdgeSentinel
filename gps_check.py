@@ -54,7 +54,7 @@ def separator(title=""):
 # ─────────────────────────────────────────────
 def main():
     print("=" * 60)
-    print("   GPS Status & Armable Check — Pixhawk 2.4.8")
+    print("   GPS Status & Armable Check - Pixhawk 2.4.8")
     print("=" * 60)
 
     # ── Connect ──────────────────────────────────────────────────
@@ -76,7 +76,7 @@ def main():
     log("INFO", f"Armed  : {vehicle.armed}")
     log("INFO", f"System : {vehicle.system_status.state}")
 
-    # ── Polling Loop — repeat until armable ──────────────────────
+    # ── Polling Loop - repeat until armable ──────────────────────
     try:
         CHECK_INTERVAL = 3          # seconds between each re-check
         attempt        = 1
@@ -97,7 +97,7 @@ def main():
             level_ok = abs(att.roll) < 0.1 and abs(att.pitch) < 0.1
 
             # Print current snapshot
-            log("INFO", f"GPS Fix    : {fix_type} — {fix_label}")
+            log("INFO", f"GPS Fix    : {fix_type} - {fix_label}")
             log("INFO", f"Satellites : {sats}")
             log("OK"   if ekf_ok else "ERR",
                 f"EKF        : {'Healthy' if ekf_ok else 'NOT healthy'}")
@@ -105,14 +105,14 @@ def main():
                 log("INFO", f"Battery    : {batt.voltage:.2f} V  |  {batt.level}%")
             log("INFO", f"Mode       : {vehicle.mode.name}")
             log("OK"   if level_ok else "WARN",
-                f"Level      : {'OK' if level_ok else 'Tilted — place on flat surface'}")
+                f"Level      : {'OK' if level_ok else 'Tilted - place on flat surface'}")
             log("OK"   if home else "WARN",
                 f"Home       : {'Set' if home else 'Not set yet'}")
 
             is_armable = vehicle.is_armable
 
             if is_armable:
-                # ── SUCCESS — exit the loop ───────────────────────
+                # ── SUCCESS - exit the loop ───────────────────────
                 print("""
   ╔══════════════════════════════════════════╗
   ║   ✅  VEHICLE IS ARMABLE                 ║
@@ -123,10 +123,10 @@ def main():
                 break
 
             else:
-                # ── NOT YET — print reasons and wait ─────────────
+                # ── NOT YET - print reasons and wait ─────────────
                 print("""
   ╔══════════════════════════════════════════╗
-  ║   ❌  NOT ARMABLE YET — retrying …       ║
+  ║   ❌  NOT ARMABLE YET - retrying …       ║
   ╚══════════════════════════════════════════╝
                 """)
                 print("  Failing checks:")

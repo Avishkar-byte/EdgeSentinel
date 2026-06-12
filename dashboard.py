@@ -1,5 +1,5 @@
 """
-Drone Mission Dashboard — Web Server
+Drone Mission Dashboard - Web Server
 Streams the RealSense D455 annotated depth feed and live drone
 telemetry / obstacle-avoidance decisions over a local network.
 
@@ -58,7 +58,7 @@ class DroneState:
             "altitude"       : 0.0,
             "heading"        : 0.0,
             "armed"          : False,
-            "mode"           : "—",
+            "mode"           : "-",
             "gps_fix"        : 0,
             "ekf_ok"         : False,
             "lat"            : 0.0,
@@ -71,11 +71,11 @@ class DroneState:
             "obstacle"       : False,
             "left_ok"        : False,
             "right_ok"       : False,
-            "leg"            : "—",
+            "leg"            : "-",
             "dist_to_wp"     : 0.0,
             "log_lines"      : [],
             "connected"      : False,
-            "timestamp"      : "—",
+            "timestamp"      : "-",
         }
 
     def update(self, **kwargs):
@@ -238,10 +238,10 @@ class DashboardCamera:
         if not obstacle:
             return "MOVE FORWARD", f"Path clear (red={ctr_red:.0%})"
         if left_ok:
-            return "DODGE LEFT",   f"Left clear ({lft_clr:.0%}) — sidestepping"
+            return "DODGE LEFT",   f"Left clear ({lft_clr:.0%}) - sidestepping"
         if right_ok:
-            return "DODGE RIGHT",  f"Right clear ({rgt_clr:.0%}) — sidestepping"
-        return "HOLD", f"All blocked — L:{lft_clr:.0%} R:{rgt_clr:.0%} wait…"
+            return "DODGE RIGHT",  f"Right clear ({rgt_clr:.0%}) - sidestepping"
+        return "HOLD", f"All blocked - L:{lft_clr:.0%} R:{rgt_clr:.0%} wait…"
 
     def get_jpeg(self) -> bytes:
         with self._frame_lock:
@@ -273,7 +273,7 @@ def start_telemetry_thread(connection_string: str = "/dev/ttyTHS1",
                            baud: int = 57600):
     """
     Connects to Pixhawk in background and feeds telemetry into state.
-    Runs as a daemon thread — dashboard works without it too.
+    Runs as a daemon thread - dashboard works without it too.
     """
     def _run():
         try:
@@ -665,17 +665,17 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="zones">
         <div class="zone-card" id="zone-left">
           <div class="zone-name">◀ Left</div>
-          <div class="zone-pct" id="z-left-pct">—</div>
+          <div class="zone-pct" id="z-left-pct">-</div>
           <div class="zone-status" id="z-left-st">checking</div>
         </div>
         <div class="zone-card" id="zone-center">
           <div class="zone-name">▲ Forward</div>
-          <div class="zone-pct" id="z-ctr-pct">—</div>
+          <div class="zone-pct" id="z-ctr-pct">-</div>
           <div class="zone-status" id="z-ctr-st">checking</div>
         </div>
         <div class="zone-card" id="zone-right">
           <div class="zone-name">▶ Right</div>
-          <div class="zone-pct" id="z-right-pct">—</div>
+          <div class="zone-pct" id="z-right-pct">-</div>
           <div class="zone-status" id="z-right-st">checking</div>
         </div>
       </div>
@@ -691,7 +691,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="compass-wrap">
         <canvas id="compass" width="120" height="120"></canvas>
       </div>
-      <div class="gps-coords" id="gps-txt">GPS: — , —</div>
+      <div class="gps-coords" id="gps-txt">GPS: - , -</div>
     </div>
 
     <!-- Telemetry -->
@@ -700,27 +700,27 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="telem-grid">
         <div class="telem-item">
           <div class="t-label">Altitude</div>
-          <div class="t-val" id="t-alt">—</div>
+          <div class="t-val" id="t-alt">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">Heading</div>
-          <div class="t-val" id="t-hdg">—</div>
+          <div class="t-val" id="t-hdg">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">Mode</div>
-          <div class="t-val guided" id="t-mode">—</div>
+          <div class="t-val guided" id="t-mode">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">Armed</div>
-          <div class="t-val" id="t-armed">—</div>
+          <div class="t-val" id="t-armed">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">GPS Fix</div>
-          <div class="t-val" id="t-gps">—</div>
+          <div class="t-val" id="t-gps">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">EKF</div>
-          <div class="t-val" id="t-ekf">—</div>
+          <div class="t-val" id="t-ekf">-</div>
         </div>
       </div>
 
@@ -740,11 +740,11 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="telem-grid">
         <div class="telem-item">
           <div class="t-label">Current Leg</div>
-          <div class="t-val" id="t-leg" style="color:var(--yellow)">—</div>
+          <div class="t-val" id="t-leg" style="color:var(--yellow)">-</div>
         </div>
         <div class="telem-item">
           <div class="t-label">Dist to WP</div>
-          <div class="t-val" id="t-dist">—</div>
+          <div class="t-val" id="t-dist">-</div>
         </div>
       </div>
     </div>
@@ -757,7 +757,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
   </div>
 
 </div>
-<div id="ts-bar">Last update: <span id="ts">—</span></div>
+<div id="ts-bar">Last update: <span id="ts">-</span></div>
 
 <script>
 // ── Compass canvas ────────────────────────────────────────
@@ -842,7 +842,7 @@ async function poll() {
                 dec === 'HOLD' ? 'hold' : 'wait';
     label.className = 'decision-label ' + cls;
     bar.className   = 'decision-bar '   + cls;
-    document.getElementById('dec-reason').textContent = s.decision_reason || '—';
+    document.getElementById('dec-reason').textContent = s.decision_reason || '-';
 
     // Zones
     const ctrRed  = Math.round(s.center_red  * 100);
@@ -871,7 +871,7 @@ async function poll() {
     document.getElementById('t-gps').textContent  = ['None','None','2D','3D','3D+DGPS'][Math.min(s.gps_fix,4)] || s.gps_fix;
     document.getElementById('t-ekf').textContent  = s.ekf_ok ? '✅ OK' : '⚠ WARN';
 
-    // Altitude bar (0–10m scale)
+    // Altitude bar (0-10m scale)
     const altPct = Math.min((s.altitude / 10) * 100, 100);
     document.getElementById('alt-bar').style.width = altPct + '%';
     document.getElementById('alt-val').textContent = s.altitude + 'm';

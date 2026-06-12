@@ -6,7 +6,7 @@ Hardware: Pixhawk 2.4.8 + Jetson Nano + Intel RealSense D455
 Protocol: MAVLink via DroneKit + pyrealsense2
 
 ════════════════════════════════════════════════════════
-DEPTH COLORMAP (Jet — corrected):
+DEPTH COLORMAP (Jet - corrected):
   RED   = CLOSE / NEAR objects  → OBSTACLE
   BLUE  = FAR  / OPEN space     → SAFE
   BLACK = No depth data / void  → SAFE
@@ -79,14 +79,14 @@ class DroneState:
         self._lock = threading.Lock()
         self.data = {
             "altitude": 0.0, "heading": 0.0, "armed": False,
-            "mode": "—", "gps_fix": 0, "ekf_ok": False,
+            "mode": "-", "gps_fix": 0, "ekf_ok": False,
             "lat": 0.0, "lon": 0.0,
             "decision": "WAITING", "decision_reason": "Initializing …",
             "center_red": 0.0, "left_clear": 0.0, "right_clear": 0.0,
             "obstacle": False, "left_ok": False, "right_ok": False,
             "leg": "PRE-FLIGHT", "dist_to_wp": 0.0,
             "log_lines": [], "connected": False,
-            "timestamp": "—",
+            "timestamp": "-",
         }
 
     def update(self, **kwargs):
@@ -120,7 +120,7 @@ def abort(msg: str):
 
 
 # ══════════════════════════════════════════════════════
-#  REALSENSE D455  —  depth + color analysis
+#  REALSENSE D455  -  depth + color analysis
 # ══════════════════════════════════════════════════════
 
 class DepthCamera:
@@ -161,7 +161,7 @@ class DepthCamera:
                 raw     = np.asanyarray(colored.get_data())
                 # RealSense gives RGB → convert to BGR for OpenCV
                 bgr     = cv2.cvtColor(raw, cv2.COLOR_RGB2BGR)
-                # No vertical flip needed — invert_depth_values handles near=red
+                # No vertical flip needed - invert_depth_values handles near=red
                 annotated = self._annotate(bgr)
                 with self._frame_lock:
                     self._latest_bgr = annotated
@@ -265,9 +265,9 @@ class DepthCamera:
         if not obstacle:
             return "MOVE FORWARD", f"Path clear  red={ctr_red:.0%}"
         if left_ok:
-            return "DODGE LEFT",   f"Left clear {lft_clr:.0%} — dodging"
+            return "DODGE LEFT",   f"Left clear {lft_clr:.0%} - dodging"
         if right_ok:
-            return "DODGE RIGHT",  f"Right clear {rgt_clr:.0%} — dodging"
+            return "DODGE RIGHT",  f"Right clear {rgt_clr:.0%} - dodging"
         return "HOLD",             f"All blocked  L:{lft_clr:.0%} R:{rgt_clr:.0%}"
 
     def get_frame(self):
@@ -450,9 +450,9 @@ header h1 span{color:var(--text);font-weight:400}
     <div class="panel">
       <div class="pt">Depth Zone Analysis</div>
       <div class="zones">
-        <div class="zc" id="zleft"><div class="zn">◀ Left</div><div class="zp" id="zl-p">—</div><div class="zs" id="zl-s">—</div></div>
-        <div class="zc" id="zctr"><div class="zn">▲ Forward</div><div class="zp" id="zc-p">—</div><div class="zs" id="zc-s">—</div></div>
-        <div class="zc" id="zright"><div class="zn">▶ Right</div><div class="zp" id="zr-p">—</div><div class="zs" id="zr-s">—</div></div>
+        <div class="zc" id="zleft"><div class="zn">◀ Left</div><div class="zp" id="zl-p">-</div><div class="zs" id="zl-s">-</div></div>
+        <div class="zc" id="zctr"><div class="zn">▲ Forward</div><div class="zp" id="zc-p">-</div><div class="zs" id="zc-s">-</div></div>
+        <div class="zc" id="zright"><div class="zn">▶ Right</div><div class="zp" id="zr-p">-</div><div class="zs" id="zr-s">-</div></div>
       </div>
     </div>
   </div>
@@ -462,18 +462,18 @@ header h1 span{color:var(--text);font-weight:400}
     <div class="panel">
       <div class="pt">Navigation</div>
       <div class="cw"><canvas id="compass" width="116" height="116"></canvas></div>
-      <div class="gps" id="gps">GPS: — , —</div>
+      <div class="gps" id="gps">GPS: - , -</div>
     </div>
 
     <div class="panel">
       <div class="pt">Telemetry</div>
       <div class="tg">
-        <div class="ti"><div class="tl">Altitude</div><div class="tv" id="t-alt">—</div></div>
-        <div class="ti"><div class="tl">Heading</div><div class="tv" id="t-hdg">—</div></div>
-        <div class="ti"><div class="tl">Mode</div><div class="tv" id="t-mode" style="color:var(--accent)">—</div></div>
-        <div class="ti"><div class="tl">Armed</div><div class="tv" id="t-arm">—</div></div>
-        <div class="ti"><div class="tl">GPS Fix</div><div class="tv" id="t-gps">—</div></div>
-        <div class="ti"><div class="tl">EKF</div><div class="tv" id="t-ekf">—</div></div>
+        <div class="ti"><div class="tl">Altitude</div><div class="tv" id="t-alt">-</div></div>
+        <div class="ti"><div class="tl">Heading</div><div class="tv" id="t-hdg">-</div></div>
+        <div class="ti"><div class="tl">Mode</div><div class="tv" id="t-mode" style="color:var(--accent)">-</div></div>
+        <div class="ti"><div class="tl">Armed</div><div class="tv" id="t-arm">-</div></div>
+        <div class="ti"><div class="tl">GPS Fix</div><div class="tv" id="t-gps">-</div></div>
+        <div class="ti"><div class="tl">EKF</div><div class="tv" id="t-ekf">-</div></div>
       </div>
       <div class="gr">
         <div class="gl">ALT</div>
@@ -485,8 +485,8 @@ header h1 span{color:var(--text);font-weight:400}
     <div class="panel">
       <div class="pt">Mission</div>
       <div class="tg">
-        <div class="ti"><div class="tl">Leg</div><div class="tv" id="t-leg" style="color:var(--yellow)">—</div></div>
-        <div class="ti"><div class="tl">Dist to WP</div><div class="tv" id="t-dist">—</div></div>
+        <div class="ti"><div class="tl">Leg</div><div class="tv" id="t-leg" style="color:var(--yellow)">-</div></div>
+        <div class="ti"><div class="tl">Dist to WP</div><div class="tv" id="t-dist">-</div></div>
       </div>
     </div>
 
@@ -496,7 +496,7 @@ header h1 span{color:var(--text);font-weight:400}
     </div>
   </div>
 </div>
-<div id="tsb">Last update: <span id="ts">—</span></div>
+<div id="tsb">Last update: <span id="ts">-</span></div>
 
 <script>
 const c = document.getElementById('compass'), ctx = c.getContext('2d');
@@ -546,7 +546,7 @@ async function poll(){
     dl.textContent=dec;
     const cls=dec.includes('FORWARD')?'clear':dec.includes('DODGE')?'dodge':dec==='HOLD'?'hold':'wait';
     dl.className='dec-label '+cls; db.className='dec-bar '+cls;
-    document.getElementById('dreason').textContent=s.decision_reason||'—';
+    document.getElementById('dreason').textContent=s.decision_reason||'-';
     // zones
     const cr=Math.round(s.center_red*100),lc=Math.round(s.left_clear*100),rc=Math.round(s.right_clear*100);
     document.getElementById('zc-p').textContent=cr+'%';
@@ -730,7 +730,7 @@ def connect_vehicle():
 
 
 def telemetry_loop(vehicle):
-    """Background thread — keeps STATE in sync with vehicle."""
+    """Background thread - keeps STATE in sync with vehicle."""
     while True:
         try:
             loc = vehicle.location.global_relative_frame
@@ -911,10 +911,10 @@ class ObstacleAvoidanceFlight:
                         if self._verify_clear():
                             dodged = True; break
                     else:
-                        log(f"  ⏸ Both sides blocked — hold ({attempt+1}/{OBSTACLE_MAX_HOLD})")
+                        log(f"  ⏸ Both sides blocked - hold ({attempt+1}/{OBSTACLE_MAX_HOLD})")
                         time.sleep(OBSTACLE_HOLD_SEC)
                 if not dodged:
-                    log("  ⚠ No clear path — best effort")
+                    log("  ⚠ No clear path - best effort")
 
             send_yaw_command(self.vehicle, facing_heading)
             time.sleep(0.1)
@@ -925,13 +925,13 @@ class ObstacleAvoidanceFlight:
 # ══════════════════════════════════════════════════════
 
 def wait_for_rtl_land(vehicle):
-    log("RTL active — monitoring …")
+    log("RTL active - monitoring …")
     STATE.update(leg="RTL LANDING")
     while True:
         alt = vehicle.location.global_relative_frame.alt
         log(f"  Alt: {alt:.2f}m  Mode: {vehicle.mode.name}  Armed: {vehicle.armed}")
         if not vehicle.armed:
-            log("✓ RTL complete — landed + disarmed"); return
+            log("✓ RTL complete - landed + disarmed"); return
         if alt <= 0.3:
             log("✓ Near ground …")
             time.sleep(5)
@@ -1042,7 +1042,7 @@ def main():
             vehicle.close()
 
     # Keep Flask alive so dashboard stays accessible after mission
-    log("Dashboard still running — press Ctrl+C to quit")
+    log("Dashboard still running - press Ctrl+C to quit")
     while True:
         time.sleep(1)
 

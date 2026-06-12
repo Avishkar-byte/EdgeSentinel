@@ -10,20 +10,20 @@
 
 **Autonomous, Energy-Aware Drone Platform with On-Device Depth-Based Obstacle Avoidance and Real-Time Surveillance**
 
-> 9th Edition TECHgium® POC Round — VIT Chennai  
+> 9th Edition TECHgium® POC Round - VIT Chennai  
 > PID No.: TG0911360
 
-EdgeSentinel is a fully autonomous hexacopter that performs depth-based obstacle avoidance and real-time person surveillance **entirely on-device** — no cloud, no external compute, no internet required. All sensing, perception, decision-making, and flight control run locally on an NVIDIA Jetson Orin Nano, communicating with a Pixhawk 2.4.8 flight controller over MAVLink.
+EdgeSentinel is a fully autonomous hexacopter that performs depth-based obstacle avoidance and real-time person surveillance **entirely on-device** - no cloud, no external compute, no internet required. All sensing, perception, decision-making, and flight control run locally on an NVIDIA Jetson Orin Nano, communicating with a Pixhawk 2.4.8 flight controller over MAVLink.
 
 ---
 
 ## Base Station Dashboard
 
 <p align="center">
-  <img src="assets/dashboard.jpeg" alt="EdgeSentinel Base Station Dashboard — Real-time surveillance UI with YOLO person detection, D455 depth field, and 3D point cloud reconstruction" width="100%"/>
+  <img src="assets/dashboard.jpeg" alt="EdgeSentinel Base Station Dashboard - Real-time surveillance UI with YOLO person detection, D455 depth field, and 3D point cloud reconstruction" width="100%"/>
 </p>
 
-<p align="center"><em>Base Station Dashboard — Accessible via private IP on the local network. Displays three simultaneous live feeds: YOLOv8 person detection (92% confidence), Intel RealSense D455 depth field colormap (640×480 @ 30 FPS), and RGB+D fusion 3D point cloud reconstruction (21,123 pts), with real-time 3S LiPo power telemetry (12.5V).</em></p>
+<p align="center"><em>Base Station Dashboard - Accessible via private IP on the local network. Displays three simultaneous live feeds: YOLOv8 person detection (92% confidence), Intel RealSense D455 depth field colormap (640×480 @ 30 FPS), and RGB+D fusion 3D point cloud reconstruction (21,123 pts), with real-time 3S LiPo power telemetry (12.5V).</em></p>
 
 ---
 
@@ -98,7 +98,7 @@ EdgeSentinel is a fully autonomous hexacopter that performs depth-based obstacle
 EdgeSentinel/
 ├── assets/
 │   └── dashboard.jpeg          # Base station dashboard screenshot
-├── obstacle_avoidance.py       # Main flight script — autonomous obstacle avoidance + live dashboard
+├── obstacle_avoidance.py       # Main flight script - autonomous obstacle avoidance + live dashboard
 ├── dashboard.py                # Standalone Flask surveillance dashboard (MJPEG + telemetry)
 ├── gps_check.py                # Pre-arm GPS/EKF/battery validator
 ├── test_hover_2m.py            # Flight test: 2m altitude hold + hover accuracy
@@ -141,7 +141,7 @@ pip install -r requirements.txt
 | Jetson Port | Pixhawk Port | Protocol |
 |---|---|---|
 | USB (`/dev/ttyACM0`) | TELEM2 / USB | MAVLink v2 @ 57600 baud |
-| USB 3.0 | — | Intel RealSense D455 |
+| USB 3.0 | - | Intel RealSense D455 |
 
 ---
 
@@ -211,23 +211,23 @@ Each test arms, flies the pattern at 2 m altitude, logs position/altitude accura
 
 ---
 
-## Obstacle Avoidance — How It Works
+## Obstacle Avoidance - How It Works
 
 The depth camera (Intel RealSense D455) produces a 640×480 depth frame at 30 FPS, rendered with the **Jet colormap**:
 
 | Color | Meaning | Action |
 |---|---|---|
-| 🔴 **Red** | Close / near object | **OBSTACLE** — must avoid |
-| 🔵 **Blue** | Far / open space | **SAFE** — fly through |
-| ⬛ **Black** | No depth data / void | **SAFE** — open air |
+| 🔴 **Red** | Close / near object | **OBSTACLE** - must avoid |
+| 🔵 **Blue** | Far / open space | **SAFE** - fly through |
+| ⬛ **Black** | No depth data / void | **SAFE** - open air |
 
 The frame is divided into three vertical zones:
 
 | Zone | Columns | Purpose |
 |---|---|---|
-| **LEFT** | 0 – 159 | Left escape route |
-| **CENTER** | 160 – 479 | Forward flight path |
-| **RIGHT** | 480 – 639 | Right escape route |
+| **LEFT** | 0 - 159 | Left escape route |
+| **CENTER** | 160 - 479 | Forward flight path |
+| **RIGHT** | 480 - 639 | Right escape route |
 
 **Decision logic** (state machine):
 1. If CENTER red ratio < 15% → **MOVE FORWARD**
@@ -275,8 +275,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- **ArduPilot** — Open-source autopilot firmware
-- **Intel RealSense** — Depth sensing SDK and D455 camera
-- **DroneKit-Python** — MAVLink vehicle control API
-- **NVIDIA JetPack** — Jetson Orin Nano platform SDK
-- **VIT Chennai** — TECHgium® POC Round hosting and evaluation
+- **ArduPilot** - Open-source autopilot firmware
+- **Intel RealSense** - Depth sensing SDK and D455 camera
+- **DroneKit-Python** - MAVLink vehicle control API
+- **NVIDIA JetPack** - Jetson Orin Nano platform SDK
+- **VIT Chennai** - TECHgium® POC Round hosting and evaluation
