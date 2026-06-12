@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/TRL-4%20(Lab%20Validated)-blue?style=for-the-badge" alt="TRL 4"/>
+  <img src="https://img.shields.io/badge/Depth%20Camera-Intel%20RealSense%20D455-0071C5?style=for-the-badge&logo=intel&logoColor=white" alt="Intel RealSense D455"/>
   <img src="https://img.shields.io/badge/Platform-Jetson%20Orin%20Nano-76B900?style=for-the-badge&logo=nvidia" alt="Jetson Orin Nano"/>
   <img src="https://img.shields.io/badge/FC-Pixhawk%202.4.8-orange?style=for-the-badge" alt="Pixhawk"/>
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
@@ -14,6 +14,16 @@
 > PID No.: TG0911360
 
 EdgeSentinel is a fully autonomous hexacopter that performs depth-based obstacle avoidance and real-time person surveillance **entirely on-device** — no cloud, no external compute, no internet required. All sensing, perception, decision-making, and flight control run locally on an NVIDIA Jetson Orin Nano, communicating with a Pixhawk 2.4.8 flight controller over MAVLink.
+
+---
+
+## Base Station Dashboard
+
+<p align="center">
+  <img src="assets/dashboard.jpeg" alt="EdgeSentinel Base Station Dashboard — Real-time surveillance UI with YOLO person detection, D455 depth field, and 3D point cloud reconstruction" width="100%"/>
+</p>
+
+<p align="center"><em>Base Station Dashboard — Accessible via private IP on the local network. Displays three simultaneous live feeds: YOLOv8 person detection (92% confidence), Intel RealSense D455 depth field colormap (640×480 @ 30 FPS), and RGB+D fusion 3D point cloud reconstruction (21,123 pts), with real-time 3S LiPo power telemetry (12.5V).</em></p>
 
 ---
 
@@ -86,16 +96,18 @@ EdgeSentinel is a fully autonomous hexacopter that performs depth-based obstacle
 
 ```
 EdgeSentinel/
-├── obstacle_avoidance.py   # Main flight script — autonomous obstacle avoidance + live dashboard
-├── dashboard.py            # Standalone Flask surveillance dashboard (MJPEG + telemetry)
-├── gps_check.py            # Pre-arm GPS/EKF/battery validator
-├── test_hover_2m.py        # Flight test: 2m altitude hold + hover accuracy
-├── test_circle.py          # Flight test: circular waypoint navigation
-├── test_forward.py         # Flight test: forward-return with heading lock
-├── test_square.py          # Flight test: square waypoint pattern
-├── requirements.txt        # Python dependencies
-├── .gitignore              # Git exclusions
-└── README.md               # This file
+├── assets/
+│   └── dashboard.jpeg          # Base station dashboard screenshot
+├── obstacle_avoidance.py       # Main flight script — autonomous obstacle avoidance + live dashboard
+├── dashboard.py                # Standalone Flask surveillance dashboard (MJPEG + telemetry)
+├── gps_check.py                # Pre-arm GPS/EKF/battery validator
+├── test_hover_2m.py            # Flight test: 2m altitude hold + hover accuracy
+├── test_circle.py              # Flight test: circular waypoint navigation
+├── test_forward.py             # Flight test: forward-return with heading lock
+├── test_square.py              # Flight test: square waypoint pattern
+├── requirements.txt            # Python dependencies
+├── .gitignore                  # Git exclusions
+└── README.md                   # This file
 ```
 
 ---
@@ -113,7 +125,7 @@ EdgeSentinel/
 
 ```bash
 # Clone
-git clone https://github.com/<your-username>/EdgeSentinel.git
+git clone https://github.com/Avishkar-byte/EdgeSentinel.git
 cd EdgeSentinel
 
 # Create virtual environment
@@ -183,7 +195,7 @@ Each test arms, flies the pattern at 2 m altitude, logs position/altitude accura
 
 ---
 
-## Performance Metrics (TRL 4 — Lab Validated)
+## Performance Metrics
 
 | Metric | Requirement | Measured (v1) | Status |
 |---|---|---|---|
